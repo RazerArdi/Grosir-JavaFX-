@@ -1,11 +1,15 @@
 package PemprogramanLanjutTB;
 
-import javafx.animation.Animation;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,7 +17,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,10 +25,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+
 public class Utama extends Application {
     private Button loginButton, registerButton, forgotPasswordButton;
     private Scene loginScene, registerScene, forgotPasswordScene;
     private TextField emailField, passwordField;
+    private static VBox imeiContentBox;
+    private static TextField imeiField;
+    private static Button searchImeiButton;
+    private static Label statusLabel;
+    private static Label productLabel;
+    private static Label imeiResultLabel;
+    private static Label activationDateLabel;
 
     public static void main(String[] args) {
         launch();
@@ -85,7 +96,7 @@ public class Utama extends Application {
 
         loginButton.setPrefSize(150, 30);
 
-        loginScene = new Scene(loginLayout, 500, 600);
+        loginScene = new Scene(loginLayout, 650, 700);
     }
 
     private void createRegisterScene(Stage stage) {
@@ -122,7 +133,7 @@ public class Utama extends Application {
                 registerEmailField, registerPasswordField, confirmRegisterPasswordField, registerSubmitButton, backToLoginLink);
         registerLayout.setAlignment(Pos.CENTER);
 
-        registerScene = new Scene(registerLayout, 500, 600);
+        registerScene = new Scene(registerLayout, 650, 700);
     }
 
     private void createForgotPasswordScene(Stage stage) {
@@ -137,7 +148,7 @@ public class Utama extends Application {
         forgotPasswordLayout.getChildren().addAll(forgotPasswordLabel, forgotPasswordEmailField, submitForgotPasswordButton);
         forgotPasswordLayout.setAlignment(Pos.CENTER);
 
-        forgotPasswordScene = new Scene(forgotPasswordLayout, 500, 600);
+        forgotPasswordScene = new Scene(forgotPasswordLayout, 650, 700);
     }
 
     private void handleLogin(Stage stage, String emailOrUsername, String password) {
@@ -159,7 +170,7 @@ public class Utama extends Application {
                 showSuccessDialog("Login successful!");
 
                 HalamanUtama halamanUtama = new HalamanUtama(stage);
-                stage.setScene(new Scene(halamanUtama, 500, 600));
+                stage.setScene(new Scene(halamanUtama, 650, 700));
                 return;
             }
         }
@@ -211,7 +222,7 @@ public class Utama extends Application {
         }
     }
 
-    private void showErrorDialog(String message) {
+    private static void showErrorDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -231,59 +242,286 @@ public class Utama extends Application {
 
         public HalamanUtama(Stage stage) {
 
-            VBox body = new VBox();
-            body.setSpacing(5);
-            body.setPadding(new Insets(10));
+            HBox headerBox = new HBox();
+            headerBox.setStyle("-fx-background-color: #4CAF50;");
+            headerBox.setPadding(new Insets(10));
+            headerBox.setSpacing(10);
+
+            Image profileImage = new Image(Utama.class.getResourceAsStream("/cus.png"));
+            ImageView profileImageView = new ImageView(profileImage);
+            profileImageView.setFitWidth(30);
+            profileImageView.setFitHeight(30);
+
+            Label gtradeLabel = new Label("\t\t\tGTrade");
+            gtradeLabel.setStyle("-fx-font-size: 25; -fx-text-fill: white;");
+            Region region = new Region();
+            HBox.setHgrow(region, Priority.ALWAYS);
 
 
-            HBox pesananBaruBox = new HBox();
-            pesananBaruBox.setStyle("-fx-background-color: #f0f0f0;");
-            pesananBaruBox.setPadding(new Insets(10));
-            pesananBaruBox.setSpacing(10);
+            Image gtradeLogo = new Image(Utama.class.getResourceAsStream("/Designer.png"));
+            ImageView gtradeLogoView = new ImageView(gtradeLogo);
+            gtradeLogoView.setFitWidth(100);
+            gtradeLogoView.setFitHeight(100);
+            VBox logoBox = new VBox();
+            logoBox.setAlignment(Pos.TOP_CENTER);
+            logoBox.getChildren().add(gtradeLogoView);
+            setCenter(logoBox);
+
+            Button searchButton = new Button();
+            searchButton.setStyle("-fx-background-color: #4CAF50;");
+            Image searchImage = new Image(Utama.class.getResourceAsStream("/se.png"));
+            ImageView searchImageView = new ImageView(searchImage);
+            searchImageView.setFitWidth(30);
+            searchImageView.setFitHeight(30);
+            searchButton.setGraphic(searchImageView);
+
+            Button notificationButton = new Button();
+            notificationButton.setStyle("-fx-background-color: #4CAF50;");
+            Image notificationImage = new Image(Utama.class.getResourceAsStream("/not.png"));
+            ImageView notificationImageView = new ImageView(notificationImage);
+            notificationImageView.setFitWidth(30);
+            notificationImageView.setFitHeight(30);
+            notificationButton.setGraphic(notificationImageView);
+
+            headerBox.getChildren().addAll(profileImageView, gtradeLabel, region, searchButton, notificationButton);
+            setTop(headerBox);
+
+            HBox bottomBarBox = new HBox();
+            bottomBarBox.setStyle("-fx-background-color: #4CAF50;");
+            bottomBarBox.setPadding(new Insets(10));
+            bottomBarBox.setSpacing(25);
+
+            Image bottomHomeImage = new Image(Utama.class.getResourceAsStream("/home.png"));
+            ImageView bottomHomeImageView = new ImageView(bottomHomeImage);
+            bottomHomeImageView.setFitWidth(30);
+            bottomHomeImageView.setFitHeight(30);
+
+            Button homeButton = new Button();
+            homeButton.setStyle("-fx-background-color: transparent;");
+            homeButton.setGraphic(bottomHomeImageView);
+            homeButton.setOnAction(e -> handleHomeButton());
+
+            Region spacer1 = new Region();
+            HBox.setHgrow(spacer1, Priority.ALWAYS);
+
+            Image bottomProductImage = new Image(Utama.class.getResourceAsStream("/gadget.png"));
+            ImageView bottomProductImageView = new ImageView(bottomProductImage);
+            bottomProductImageView.setFitWidth(30);
+            bottomProductImageView.setFitHeight(30);
+
+            Region spacer2 = new Region();
+            HBox.setHgrow(spacer2, Priority.ALWAYS);
 
 
-            HBox siapDikirimBox = new HBox();
-            siapDikirimBox.setStyle("-fx-background-color: #f0f0f0;");
-            siapDikirimBox.setPadding(new Insets(10));
-            siapDikirimBox.setSpacing(10);
+            Image bottomInvoiceImage = new Image(Utama.class.getResourceAsStream("/invoice.png"));
+            ImageView bottomInvoiceImageView = new ImageView(bottomInvoiceImage);
+            bottomInvoiceImageView.setFitWidth(30);
+            bottomInvoiceImageView.setFitHeight(30);
+
+            Region spacer3 = new Region();
+            HBox.setHgrow(spacer3, Priority.ALWAYS);
+
+            Image bottomWarrantyImage = new Image(Utama.class.getResourceAsStream("/warranty.png"));
+            ImageView bottomWarrantyImageView = new ImageView(bottomWarrantyImage);
+            bottomWarrantyImageView.setFitWidth(30);
+            bottomWarrantyImageView.setFitHeight(30);
+
+            Button warrantyButton = new Button();
+            warrantyButton.setStyle("-fx-background-color: transparent;");
+            warrantyButton.setGraphic(bottomWarrantyImageView);
+            warrantyButton.setOnAction(e -> handleWarrantyButton());
+
+            bottomBarBox.getChildren().addAll(bottomHomeImageView, spacer1, bottomProductImageView, spacer2, bottomInvoiceImageView, spacer3, warrantyButton);
+
+            setBottom(bottomBarBox);
 
 
-            HBox analisisPenjualanBox = new HBox();
-            analisisPenjualanBox.setStyle("-fx-background-color: #f0f0f0;");
-            analisisPenjualanBox.setPadding(new Insets(10));
-            analisisPenjualanBox.setSpacing(10);
+            VBox mainContent = new VBox(10);
+            mainContent.setPadding(new Insets(10));
 
 
-            Separator separator = new Separator();
+            VBox box1 = createInfoBox("Pesanan Baru", "box1");
+
+            VBox box2 = createInfoBox("Siap Dikirim", "box2");
+
+            VBox box3 = createInfoBox("Profit", "box3");
+
+            VBox box4 = createInfoBox("Terjual!!!", "box4");
+
+            LineChart<String, Number> lineChart = createLineChart();
+
+            lineChart.setPrefWidth(500);
+            lineChart.setPrefHeight(300);
+
+            mainContent.getChildren().addAll(box1, box2, box3, box4, lineChart);
+            setLeft(mainContent);
+            createImeiContent();
+        }
+
+        private static void handleHomeButton() {
+            createHomeContent();
+        }
+
+        private static void createHomeContent() {
+            VBox homeContentBox = new VBox(10);
+            homeContentBox.setAlignment(Pos.CENTER);
+
+            Label homeTitleLabel = new Label("Home");
+            homeTitleLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
 
 
-            HBox homeBox = new HBox();
-            homeBox.setStyle("-fx-background-color: #f0f0f0;");
-            homeBox.setPadding(new Insets(10));
-            homeBox.setSpacing(10);
+            homeContentBox.getChildren().addAll(homeTitleLabel);
 
-            Image homeImage = new Image(Utama.class.getResourceAsStream("/home.png"));
-            ImageView homeImageView = new ImageView(homeImage);
-            homeImageView.setFitWidth(30);
-            homeImageView.setFitHeight(30);
+            Stage newStage = new Stage();
+            newStage.setTitle("Home");
+            newStage.setScene(new Scene(homeContentBox, 400, 400));
+            newStage.show();
+        }
 
-            homeBox.getChildren().addAll(homeImageView, new Label("Home"), new Label("Product"), new Label("Invoice"), new Label("Warranty"));
 
-            body.getChildren().addAll(pesananBaruBox, siapDikirimBox, analisisPenjualanBox, separator, homeBox);
+        private VBox createInfoBox(String title, String content) {
+            VBox infoBox = new VBox();
+            infoBox.setAlignment(Pos.TOP_LEFT);
+            infoBox.setPadding(new Insets(10));
+            infoBox.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-color: #E1EFFF;");
 
-            TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), homeBox);
-            slideIn.setFromY(600);
-            slideIn.setToY(0);
+            Label titleLabel = new Label(title);
+            titleLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
 
-            homeBox.setOnMouseClicked(event -> {
-                if (slideIn.getStatus() == Animation.Status.RUNNING) {
-                    slideIn.stop();
-                } else {
-                    slideIn.play();
+            Label contentLabel = new Label(content);
+            contentLabel.setStyle("-fx-font-size: 12;");
+
+            infoBox.getChildren().addAll(titleLabel, contentLabel);
+            return infoBox;
+        }
+
+        private LineChart<String, Number> createLineChart() {
+            ObservableList<XYChart.Series<String, Number>> lineChartData = FXCollections.observableArrayList(
+                    new XYChart.Series<>("Rupiah", FXCollections.observableArrayList(
+                            new XYChart.Data<>("Jan", 500),
+                            new XYChart.Data<>("Feb", 800),
+                            new XYChart.Data<>("Mar", 1200),
+                            new XYChart.Data<>("Dec", 1500)
+                    )),
+                    new XYChart.Series<>("Tanggal", FXCollections.observableArrayList(
+                            new XYChart.Data<>("Jan", 10),
+                            new XYChart.Data<>("Feb", 20),
+                            new XYChart.Data<>("Mar", 30),
+                            new XYChart.Data<>("Dec", 50)
+                    ))
+            );
+
+            CategoryAxis xAxis = new CategoryAxis();
+            NumberAxis yAxis = new NumberAxis();
+            LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis, lineChartData);
+            lineChart.setTitle("Grafik Penjualan");
+            return lineChart;
+        }
+        private static VBox createImeiContent() {
+            VBox imeiContentBox = new VBox(10);
+            imeiContentBox.setAlignment(Pos.CENTER);
+
+            Label imeiTitleLabel = new Label("Cek IMEI");
+            imeiTitleLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+
+            imeiField = new TextField();
+            imeiField.setPromptText("Masukkan IMEI");
+
+            searchImeiButton = new Button("Search");
+            searchImeiButton.setOnAction(e -> handleImeiSearch());
+
+            statusLabel = new Label("");
+            productLabel = new Label("");
+            imeiResultLabel = new Label("");
+            activationDateLabel = new Label("");
+
+            GridPane resultGrid = new GridPane();
+            resultGrid.addRow(0, new Label("    Status Garansi:  "), statusLabel);
+            resultGrid.addRow(1, new Label("    Produk:  "), productLabel);
+            resultGrid.addRow(2, new Label("    IMEI:  "), imeiResultLabel);
+            resultGrid.addRow(3, new Label("    Tanggal Aktivasi:  "), activationDateLabel);
+
+            imeiContentBox.getChildren().addAll(imeiTitleLabel, imeiField, searchImeiButton, resultGrid);
+
+            return imeiContentBox;
+        }
+
+        private static void handleWarrantyButton() {
+            VBox imeiContentBox = createImeiContent();
+
+            Stage newStage = new Stage();
+            newStage.setTitle("IMEI Search");
+            newStage.setScene(new Scene(imeiContentBox, 400, 400));
+            newStage.show();
+        }
+
+
+        private static void updateImeiContent() {
+            imeiContentBox.getChildren().clear();
+
+            Label imeiTitleLabel = new Label("Cek IMEI");
+            imeiTitleLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+
+            imeiField = new TextField();
+            imeiField.setPromptText("Masukkan IMEI");
+
+            searchImeiButton = new Button("Search");
+            searchImeiButton.setOnAction(e -> handleImeiSearch());
+
+            statusLabel = new Label("");
+            productLabel = new Label("");
+            imeiResultLabel = new Label("");
+            activationDateLabel = new Label("");
+
+            GridPane resultGrid = new GridPane();
+            resultGrid.addRow(0, new Label("Status Garansi:"), statusLabel);
+            resultGrid.addRow(1, new Label("Produk:"), productLabel);
+            resultGrid.addRow(2, new Label("IMEI:"), imeiResultLabel);
+            resultGrid.addRow(3, new Label("Tanggal Aktivasi:"), activationDateLabel);
+
+            imeiContentBox.getChildren().addAll(imeiTitleLabel, imeiField, searchImeiButton, resultGrid);
+        }
+
+        private static void handleImeiSearch() {
+            String imeiToSearch = imeiField.getText().trim();
+
+            List<String> productData;
+            try {
+                productData = Files.readAllLines(Paths.get("PRODUKGARANSI.txt"));
+            } catch (IOException e) {
+                showErrorDialog("Error reading product data.");
+                return;
+            }
+
+            boolean imeiFound = false;
+            for (String line : productData) {
+                String[] parts = line.split(",");
+                String storedImei = parts[0];
+                String statusGaransi = parts[1];
+                String product = parts[2];
+                String activationDate = parts[3];
+
+                if (storedImei.equals(imeiToSearch)) {
+                    imeiFound = true;
+
+                    statusLabel.setText(statusGaransi);
+                    productLabel.setText(product);
+                    imeiResultLabel.setText(storedImei);
+                    activationDateLabel.setText(activationDate);
+
+                    break;
                 }
-            });
+            }
 
-            setCenter(body);
+            if (!imeiFound) {
+                statusLabel.setText("Status Garansi: Not Found");
+                productLabel.setText("Produk: Not Found");
+                imeiResultLabel.setText("IMEI: Not Found");
+                activationDateLabel.setText("Tanggal Aktivasi: Not Found");
+            }
+        }
+
+        private static void showErrorDialog(String s) {
         }
     }
 }
