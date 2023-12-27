@@ -1,13 +1,19 @@
 package PemprogramanLanjutTB;
 
+import javafx.animation.Animation;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -15,7 +21,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Utama extends Application {
     private Button loginButton, registerButton, forgotPasswordButton;
@@ -29,8 +34,8 @@ public class Utama extends Application {
     @Override
     public void start(Stage stage) {
         stage.setTitle("GTrade");
+        stage.getIcons().add(new Image(Utama.class.getResourceAsStream("/Designer.png")));
         initializeScenes(stage);
-
         stage.setScene(loginScene);
         stage.show();
     }
@@ -43,7 +48,7 @@ public class Utama extends Application {
 
     private void createLoginScene(Stage stage) {
         Label helloLabel = new Label("Hello");
-        helloLabel.setStyle("-fx-font-size: 25");
+        helloLabel.setStyle("-fx-font-size: 50; -fx-text-fill: linear-gradient(to right, blue, red)");
 
         Label signInLabel = new Label("Sign in to your account");
         signInLabel.setStyle("-fx-font-size: 10");
@@ -53,27 +58,35 @@ public class Utama extends Application {
         passwordField = new PasswordField();
         passwordField.setPromptText("Password");
 
-        loginButton = new Button("Log In");
+        loginButton = new Button("Login");
+        loginButton.setStyle("-fx-font-size: 14; -fx-background-color: #1877f2; -fx-text-fill: white; -fx-font-weight: bold;");
         loginButton.setOnAction(e -> handleLogin(stage, emailField.getText(), passwordField.getText()));
 
         Hyperlink registerLink = new Hyperlink("Register here");
         registerLink.setOnAction(e -> stage.setScene(registerScene));
 
-        forgotPasswordButton = new Button("Forgot Password?");
-        forgotPasswordButton.setOnAction(e -> stage.setScene(forgotPasswordScene));
+        Hyperlink forgotPasswordLink = new Hyperlink("Click here ");
+        forgotPasswordLink.setOnAction(e -> stage.setScene(forgotPasswordScene));
 
         TextFlow textFlow = new TextFlow(
-                new Text("\t\t\t\t\t\tDon't have an Account? "),
-                registerLink
+                new Text("\t\t\t\t\t"),
+                new Text("Don't have an Account? "),
+                registerLink,
+                new Text("\n"),
+                new Text("\t\t\t\t\t"),
+                new Text("Forgot password? "),
+                forgotPasswordLink
         );
 
-        VBox loginLayout = new VBox(20);
-        loginLayout.getChildren().addAll(helloLabel, signInLabel, emailField, passwordField, loginButton, textFlow, forgotPasswordButton);
+        VBox loginLayout = new VBox(10);
+        loginLayout.getChildren().addAll(helloLabel, signInLabel, emailField, passwordField, loginButton, textFlow);
         loginLayout.setAlignment(Pos.CENTER);
+        loginLayout.setStyle("-fx-background-color: #EEF5FF; -fx-padding: 20;");
+
+        loginButton.setPrefSize(150, 30);
 
         loginScene = new Scene(loginLayout, 500, 600);
     }
-
 
     private void createRegisterScene(Stage stage) {
         Label registerHelloLabel = new Label("Hello");
@@ -120,7 +133,7 @@ public class Utama extends Application {
         Button submitForgotPasswordButton = new Button("Submit");
         submitForgotPasswordButton.setOnAction(e -> handleForgotPassword(stage, forgotPasswordEmailField.getText()));
 
-        VBox forgotPasswordLayout = new VBox(20);
+        VBox forgotPasswordLayout = new VBox(5);
         forgotPasswordLayout.getChildren().addAll(forgotPasswordLabel, forgotPasswordEmailField, submitForgotPasswordButton);
         forgotPasswordLayout.setAlignment(Pos.CENTER);
 
@@ -144,14 +157,15 @@ public class Utama extends Application {
 
             if ((storedEmail.equals(emailOrUsername) || storedUsername.equals(emailOrUsername)) && storedPassword.equals(password)) {
                 showSuccessDialog("Login successful!");
+
+                HalamanUtama halamanUtama = new HalamanUtama(stage);
+                stage.setScene(new Scene(halamanUtama, 500, 600));
                 return;
             }
         }
 
         showErrorDialog("Invalid email/username or password.");
     }
-
-
 
     private void handleRegistration(Stage stage, String fullName, String username, String email, String password, String confirmPassword) {
         if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
@@ -174,7 +188,6 @@ public class Utama extends Application {
         }
     }
 
-
     private void handleForgotPassword(Stage stage, String email) {
         if (isValidEmail(email)) {
             saveRequestData(email);
@@ -190,7 +203,7 @@ public class Utama extends Application {
     }
 
     private void saveRequestData(String email) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("DataRequest.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("PermintaanPerubahanData.txt", true))) {
             writer.write(email);
             writer.newLine();
         } catch (IOException e) {
@@ -212,5 +225,65 @@ public class Utama extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private static class HalamanUtama extends BorderPane {
+
+        public HalamanUtama(Stage stage) {
+
+            VBox body = new VBox();
+            body.setSpacing(5);
+            body.setPadding(new Insets(10));
+
+
+            HBox pesananBaruBox = new HBox();
+            pesananBaruBox.setStyle("-fx-background-color: #f0f0f0;");
+            pesananBaruBox.setPadding(new Insets(10));
+            pesananBaruBox.setSpacing(10);
+
+
+            HBox siapDikirimBox = new HBox();
+            siapDikirimBox.setStyle("-fx-background-color: #f0f0f0;");
+            siapDikirimBox.setPadding(new Insets(10));
+            siapDikirimBox.setSpacing(10);
+
+
+            HBox analisisPenjualanBox = new HBox();
+            analisisPenjualanBox.setStyle("-fx-background-color: #f0f0f0;");
+            analisisPenjualanBox.setPadding(new Insets(10));
+            analisisPenjualanBox.setSpacing(10);
+
+
+            Separator separator = new Separator();
+
+
+            HBox homeBox = new HBox();
+            homeBox.setStyle("-fx-background-color: #f0f0f0;");
+            homeBox.setPadding(new Insets(10));
+            homeBox.setSpacing(10);
+
+            Image homeImage = new Image(Utama.class.getResourceAsStream("/home.png"));
+            ImageView homeImageView = new ImageView(homeImage);
+            homeImageView.setFitWidth(30);
+            homeImageView.setFitHeight(30);
+
+            homeBox.getChildren().addAll(homeImageView, new Label("Home"), new Label("Product"), new Label("Invoice"), new Label("Warranty"));
+
+            body.getChildren().addAll(pesananBaruBox, siapDikirimBox, analisisPenjualanBox, separator, homeBox);
+
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), homeBox);
+            slideIn.setFromY(600);
+            slideIn.setToY(0);
+
+            homeBox.setOnMouseClicked(event -> {
+                if (slideIn.getStatus() == Animation.Status.RUNNING) {
+                    slideIn.stop();
+                } else {
+                    slideIn.play();
+                }
+            });
+
+            setCenter(body);
+        }
     }
 }

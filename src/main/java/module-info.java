@@ -10,8 +10,7 @@ module pro.pemprogramanlanjuttb {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
 
-    opens pro.pemprogramanlanjuttb to javafx.fxml;
     exports PemprogramanLanjutTB;
-    opens PemprogramanLanjutTB to javafx.fxml;
 }
