@@ -67,6 +67,14 @@ public class Utama extends Application {
     }
 
     private void createLoginScene(Stage stage) {
+        Image logo = new Image(Utama.class.getResourceAsStream("/Designer.png"));
+        ImageView gtradeLogoView = new ImageView(logo);
+        gtradeLogoView.setFitWidth(200);
+        gtradeLogoView.setFitHeight(150);
+        VBox logo1 = new VBox();
+        logo1.setAlignment(Pos.TOP_CENTER);
+        logo1.getChildren().add(gtradeLogoView);
+
         Label helloLabel = new Label("Hello");
         helloLabel.setStyle("-fx-font-size: 50; -fx-text-fill: linear-gradient(to right, blue, red)");
 
@@ -99,7 +107,7 @@ public class Utama extends Application {
         );
 
         VBox loginLayout = new VBox(10);
-        loginLayout.getChildren().addAll(helloLabel, signInLabel, emailField, passwordField, loginButton, textFlow);
+        loginLayout.getChildren().addAll(logo1,helloLabel, signInLabel, emailField, passwordField, loginButton, textFlow);
         loginLayout.setAlignment(Pos.CENTER);
         loginLayout.setStyle("-fx-background-color: #EEF5FF; -fx-padding: 20;");
 
