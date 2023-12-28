@@ -11,21 +11,26 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-import javax.swing.event.HyperlinkEvent;
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import javafx.scene.shape.Line;
+
+import static java.awt.Color.*;
 
 
 public class Utama extends Application {
@@ -182,7 +187,7 @@ public class Utama extends Application {
             if ((storedEmail.equals(emailOrUsername) || storedUsername.equals(emailOrUsername)) && storedPassword.equals(password)) {
                 showSuccessDialog("Login successful!");
 
-                HalamanUtama halamanUtama = new HalamanUtama(stage);
+                Beranda halamanUtama = new Beranda(stage);
                 stage.setScene(new Scene(halamanUtama, 650, 700));
                 return;
             }
@@ -251,9 +256,8 @@ public class Utama extends Application {
         alert.showAndWait();
     }
 
-    private static class HalamanUtama extends BorderPane {
-
-        public HalamanUtama(Stage stage) {
+    private static class Beranda extends BorderPane {
+        public Beranda(Stage stage) {
 
             HBox headerBox = new HBox();
             headerBox.setStyle("-fx-background-color: #4CAF50;");
@@ -266,12 +270,10 @@ public class Utama extends Application {
             profileImageView.setFitHeight(30);
             profileImageView.setOnMouseClicked(e -> handleprofileButton());
 
-
             Label gtradeLabel = new Label("\t\t\tGTrade");
             gtradeLabel.setStyle("-fx-font-size: 25; -fx-text-fill: white;");
             Region region = new Region();
             HBox.setHgrow(region, Priority.ALWAYS);
-
 
             Image gtradeLogo = new Image(Utama.class.getResourceAsStream("/Designer.png"));
             ImageView gtradeLogoView = new ImageView(gtradeLogo);
@@ -383,9 +385,123 @@ public class Utama extends Application {
         }
 
         private void handleInvoiceButton() {
-            VBox oi = new VBox(10);
-            System.out.println("Halo");
-            Scene scene = new Scene(oi, 300, 200);
+            BorderPane gadLayout = new BorderPane();
+
+            HBox headerBox = new HBox();
+            headerBox.setStyle("-fx-background-color: #4CAF50;");
+            headerBox.setPadding(new Insets(10));
+            headerBox.setSpacing(10);
+
+            Image profileImage = new Image(Utama.class.getResourceAsStream("/cus.png"));
+            ImageView profileImageView = new ImageView(profileImage);
+            profileImageView.setFitWidth(30);
+            profileImageView.setFitHeight(30);
+            profileImageView.setOnMouseClicked(e -> handleprofileButton());
+
+            Label gtradeLabel = new Label("\t\t\tGTrade");
+            gtradeLabel.setStyle("-fx-font-size: 25; -fx-text-fill: white;");
+            Region region = new Region();
+            HBox.setHgrow(region, Priority.ALWAYS);
+
+            Image gtradeLogo = new Image(Utama.class.getResourceAsStream("/Designer.png"));
+            ImageView gtradeLogoView = new ImageView(gtradeLogo);
+            gtradeLogoView.setFitWidth(100);
+            gtradeLogoView.setFitHeight(100);
+            VBox logoBox = new VBox();
+            logoBox.setAlignment(Pos.TOP_CENTER);
+            logoBox.getChildren().add(gtradeLogoView);
+
+            Button searchButton = new Button();
+            searchButton.setStyle("-fx-background-color: #4CAF50;");
+            Image searchImage = new Image(Utama.class.getResourceAsStream("/se.png"));
+            ImageView searchImageView = new ImageView(searchImage);
+            searchImageView.setFitWidth(30);
+            searchImageView.setFitHeight(30);
+            searchButton.setGraphic(searchImageView);
+
+            Button notificationButton = new Button();
+            notificationButton.setStyle("-fx-background-color: #4CAF50;");
+            Image notificationImage = new Image(Utama.class.getResourceAsStream("/not.png"));
+            ImageView notificationImageView = new ImageView(notificationImage);
+            notificationImageView.setFitWidth(30);
+            notificationImageView.setFitHeight(30);
+            notificationButton.setGraphic(notificationImageView);
+
+            headerBox.getChildren().addAll(profileImageView, gtradeLabel, region, searchButton, notificationButton);
+            gadLayout.setTop(headerBox);
+
+
+            VBox InvoiceContent = new VBox(10);
+            Label Invoice = new Label("Invoice Content");
+            Text gadgetDescription = new Text("This is the content of the Invoice page.");
+            InvoiceContent.getChildren().addAll(Invoice, gadgetDescription);
+
+            gadLayout.setCenter(InvoiceContent);
+
+            HBox bottomBarBoxGad = new HBox();
+            bottomBarBoxGad.setStyle("-fx-background-color: #4CAF50;");
+            bottomBarBoxGad.setPadding(new Insets(10));
+            bottomBarBoxGad.setSpacing(25);
+
+            HBox bottomBarBox = new HBox();
+            bottomBarBox.setStyle("-fx-background-color: #4CAF50;");
+            bottomBarBox.setPadding(new Insets(10));
+            bottomBarBox.setSpacing(25);
+
+            Image bottomHomeImage = new Image(Utama.class.getResourceAsStream("/home.png"));
+            ImageView bottomHomeImageView = new ImageView(bottomHomeImage);
+            bottomHomeImageView.setFitWidth(30);
+            bottomHomeImageView.setFitHeight(30);
+
+            Button homeButton = new Button();
+            homeButton.setStyle("-fx-background-color: transparent;");
+            homeButton.setGraphic(bottomHomeImageView);
+            homeButton.setOnAction(e -> handleHomeButton());
+
+            Region spacer1 = new Region();
+            HBox.setHgrow(spacer1, Priority.ALWAYS);
+
+            Image bottomProductImage = new Image(Utama.class.getResourceAsStream("/gadget.png"));
+            ImageView bottomProductImageView = new ImageView(bottomProductImage);
+            bottomProductImageView.setFitWidth(30);
+            bottomProductImageView.setFitHeight(30);
+            Button gadgetButton = new Button();
+            gadgetButton.setStyle("-fx-background-color: transparent;");
+            gadgetButton.setGraphic(bottomProductImageView);
+            gadgetButton.setOnAction(e -> handleGadgetButton());
+
+            Region spacer2 = new Region();
+            HBox.setHgrow(spacer2, Priority.ALWAYS);
+
+
+            Image bottomInvoiceImage = new Image(Utama.class.getResourceAsStream("/invoice.png"));
+            ImageView bottomInvoiceImageView = new ImageView(bottomInvoiceImage);
+            Button InvoiceButton = new Button();
+            bottomInvoiceImageView.setFitWidth(30);
+            bottomInvoiceImageView.setFitHeight(30);
+            InvoiceButton.setStyle("-fx-background-color: transparent;");
+            InvoiceButton.setGraphic(bottomInvoiceImageView);
+            InvoiceButton.setOnAction(e -> handleInvoiceButton());
+
+
+            Region spacer3 = new Region();
+            HBox.setHgrow(spacer3, Priority.ALWAYS);
+
+            Image bottomWarrantyImage = new Image(Utama.class.getResourceAsStream("/warranty.png"));
+            ImageView bottomWarrantyImageView = new ImageView(bottomWarrantyImage);
+            bottomWarrantyImageView.setFitWidth(30);
+            bottomWarrantyImageView.setFitHeight(30);
+
+            Button warrantyButton = new Button();
+            warrantyButton.setStyle("-fx-background-color: transparent;");
+            warrantyButton.setGraphic(bottomWarrantyImageView);
+            warrantyButton.setOnAction(e -> handleWarrantyButton());
+
+            bottomBarBoxGad.getChildren().addAll(bottomHomeImageView, spacer1, gadgetButton, spacer2, InvoiceButton, spacer3, warrantyButton);
+
+            gadLayout.setBottom(bottomBarBoxGad);
+
+            Scene scene = new Scene(gadLayout, 650, 700);
             Stage stage = new Stage();
             stage.setTitle("Invoice");
             stage.setScene(scene);
@@ -393,14 +509,126 @@ public class Utama extends Application {
         }
 
         private void handleGadgetButton() {
-            VBox gad = new VBox(10);
-            System.out.println("Halo");
-            Scene scene = new Scene(gad, 300, 200);
+            BorderPane gadLayout = new BorderPane();
+
+            HBox headerBox = new HBox(10);
+            headerBox.setStyle("-fx-background-color: #4CAF50;");
+            headerBox.setPadding(new Insets(10));
+            headerBox.setSpacing(10);
+
+            Image profileImage = new Image(Utama.class.getResourceAsStream("/cus.png"));
+            ImageView profileImageView = new ImageView(profileImage);
+            profileImageView.setFitWidth(30);
+            profileImageView.setFitHeight(30);
+            profileImageView.setOnMouseClicked(e -> handleprofileButton());
+
+            Label gtradeLabel = new Label("\t\t\tGTrade");
+            gtradeLabel.setStyle("-fx-font-size: 25; -fx-text-fill: white;");
+            Region region = new Region();
+            HBox.setHgrow(region, Priority.ALWAYS);
+
+            Image gtradeLogo = new Image(Utama.class.getResourceAsStream("/Designer.png"));
+            ImageView gtradeLogoView = new ImageView(gtradeLogo);
+            gtradeLogoView.setFitWidth(100);
+            gtradeLogoView.setFitHeight(100);
+            VBox logoBox = new VBox();
+            logoBox.setAlignment(Pos.TOP_CENTER);
+            logoBox.getChildren().add(gtradeLogoView);
+
+            Button searchButton = new Button();
+            searchButton.setStyle("-fx-background-color: #4CAF50;");
+            Image searchImage = new Image(Utama.class.getResourceAsStream("/se.png"));
+            ImageView searchImageView = new ImageView(searchImage);
+            searchImageView.setFitWidth(30);
+            searchImageView.setFitHeight(30);
+            searchButton.setGraphic(searchImageView);
+
+            Button notificationButton = new Button();
+            notificationButton.setStyle("-fx-background-color: #4CAF50;");
+            Image notificationImage = new Image(Utama.class.getResourceAsStream("/not.png"));
+            ImageView notificationImageView = new ImageView(notificationImage);
+            notificationImageView.setFitWidth(30);
+            notificationImageView.setFitHeight(30);
+            notificationButton.setGraphic(notificationImageView);
+
+            headerBox.getChildren().addAll(profileImageView, gtradeLabel, region, searchButton, notificationButton);
+            gadLayout.setTop(headerBox);
+
+            VBox gadgetContent = new VBox(10);
+            Label gadgetLabel = new Label("Daftar Produk");
+            gadgetLabel.setStyle("-fx-font-family: Arial; -fx-font-size: 20; -fx-font-weight: bold;");
+            Text gadgetDescription = new Text("This is the content of the Gadget page.");
+            Line garis = new Line(50, 50, 3000, 50);
+
+            gadgetContent.getChildren().addAll(gadgetLabel,garis, gadgetDescription);
+
+            gadLayout.setCenter(gadgetContent);
+
+            HBox bottomBarBoxGad = new HBox();
+            bottomBarBoxGad.setStyle("-fx-background-color: #4CAF50;");
+            bottomBarBoxGad.setPadding(new Insets(10));
+            bottomBarBoxGad.setSpacing(25);
+
+            Image bottomHomeImage = new Image(Utama.class.getResourceAsStream("/home.png"));
+            ImageView bottomHomeImageView = new ImageView(bottomHomeImage);
+            bottomHomeImageView.setFitWidth(30);
+            bottomHomeImageView.setFitHeight(30);
+
+            Button homeButton = new Button();
+            homeButton.setStyle("-fx-background-color: transparent;");
+            homeButton.setGraphic(bottomHomeImageView);
+            homeButton.setOnAction(e -> handleHomeButton());
+
+            Region spacer1 = new Region();
+            HBox.setHgrow(spacer1, Priority.ALWAYS);
+
+            Image bottomProductImage = new Image(Utama.class.getResourceAsStream("/gadget.png"));
+            ImageView bottomProductImageView = new ImageView(bottomProductImage);
+            bottomProductImageView.setFitWidth(30);
+            bottomProductImageView.setFitHeight(30);
+
+            Button gadgetButton = new Button();
+            gadgetButton.setStyle("-fx-background-color: transparent;");
+            gadgetButton.setGraphic(bottomProductImageView);
+            gadgetButton.setOnAction(e -> handleGadgetButton());
+
+            Region spacer2 = new Region();
+            HBox.setHgrow(spacer2, Priority.ALWAYS);
+
+            Image bottomInvoiceImage = new Image(Utama.class.getResourceAsStream("/invoice.png"));
+            ImageView bottomInvoiceImageView = new ImageView(bottomInvoiceImage);
+            bottomInvoiceImageView.setFitWidth(30);
+            bottomInvoiceImageView.setFitHeight(30);
+
+            Button InvoiceButton = new Button();
+            InvoiceButton.setStyle("-fx-background-color: transparent;");
+            InvoiceButton.setGraphic(bottomInvoiceImageView);
+            InvoiceButton.setOnAction(e -> handleInvoiceButton());
+
+            Region spacer3 = new Region();
+            HBox.setHgrow(spacer3, Priority.ALWAYS);
+
+            Image bottomWarrantyImage = new Image(Utama.class.getResourceAsStream("/warranty.png"));
+            ImageView bottomWarrantyImageView = new ImageView(bottomWarrantyImage);
+            bottomWarrantyImageView.setFitWidth(30);
+            bottomWarrantyImageView.setFitHeight(30);
+
+            Button warrantyButton = new Button();
+            warrantyButton.setStyle("-fx-background-color: transparent;");
+            warrantyButton.setGraphic(bottomWarrantyImageView);
+            warrantyButton.setOnAction(e -> handleWarrantyButton());
+
+            bottomBarBoxGad.getChildren().addAll(bottomHomeImageView, spacer1, gadgetButton, spacer2, InvoiceButton, spacer3, warrantyButton);
+            gadLayout.setBottom(bottomBarBoxGad);
+
+            Scene scene = new Scene(gadLayout, 650, 700);
             Stage stage = new Stage();
             stage.setTitle("Gadget");
             stage.setScene(scene);
             stage.show();
         }
+
+
 
         private static void handleprofileButton() {
             String currentUser = "admin";
@@ -441,10 +669,9 @@ public class Utama extends Application {
             userProfileStage.show();
         }
 
-        private static void handleHomeButton() {
+        private void handleHomeButton() {
             createHomeContent();
         }
-
 
         private static void createHomeContent() {
             VBox homeContentBox = new VBox(10);
