@@ -110,7 +110,7 @@ public class Utama extends Application {
 
     private void createRegisterScene(Stage stage) {
         Label registerHelloLabel = new Label("Hello");
-        registerHelloLabel.setStyle("-fx-font-size: 25");
+        registerHelloLabel.setStyle("-fx-font-size: 50; -fx-text-fill: linear-gradient(to right, blue, red)");
 
         Label registerLabel = new Label("Register for a new account");
         registerLabel.setStyle("-fx-font-size: 10");
@@ -141,7 +141,7 @@ public class Utama extends Application {
         registerLayout.getChildren().addAll(registerHelloLabel, registerLabel, registerNameField, registerUsernameField,
                 registerEmailField, registerPasswordField, confirmRegisterPasswordField, registerSubmitButton, backToLoginLink);
         registerLayout.setAlignment(Pos.CENTER);
-
+        registerLayout.setStyle("-fx-background-color: #EEF5FF; -fx-padding: 20;");
         registerScene = new Scene(registerLayout, 650, 700);
     }
 
