@@ -39,7 +39,6 @@ public class Utama extends Application {
     private static Label productLabel;
     private static Label imeiResultLabel;
     private static Label activationDateLabel;
-    private Button gadgetButton;
 
 
 
@@ -335,8 +334,13 @@ public class Utama extends Application {
 
             Image bottomInvoiceImage = new Image(Utama.class.getResourceAsStream("/invoice.png"));
             ImageView bottomInvoiceImageView = new ImageView(bottomInvoiceImage);
+            Button InvoiceButton = new Button();
             bottomInvoiceImageView.setFitWidth(30);
             bottomInvoiceImageView.setFitHeight(30);
+            InvoiceButton.setStyle("-fx-background-color: transparent;");
+            InvoiceButton.setGraphic(bottomInvoiceImageView);
+            InvoiceButton.setOnAction(e -> handleInvoiceButton());
+
 
             Region spacer3 = new Region();
             HBox.setHgrow(spacer3, Priority.ALWAYS);
@@ -351,7 +355,7 @@ public class Utama extends Application {
             warrantyButton.setGraphic(bottomWarrantyImageView);
             warrantyButton.setOnAction(e -> handleWarrantyButton());
 
-            bottomBarBox.getChildren().addAll(bottomHomeImageView, spacer1, bottomProductImageView, spacer2, bottomInvoiceImageView, spacer3, warrantyButton);
+            bottomBarBox.getChildren().addAll(bottomHomeImageView, spacer1, gadgetButton, spacer2, InvoiceButton, spacer3, warrantyButton);
 
             setBottom(bottomBarBox);
 
@@ -377,20 +381,25 @@ public class Utama extends Application {
             setLeft(mainContent);
             createImeiContent();
         }
-        private void handleGadgetButton() {
-            VBox nextContentBox = createNextContent();
-            setCenter(nextContentBox);
+
+        private void handleInvoiceButton() {
+            VBox oi = new VBox(10);
+            System.out.println("Halo");
+            Scene scene = new Scene(oi, 300, 200);
+            Stage stage = new Stage();
+            stage.setTitle("Invoice");
+            stage.setScene(scene);
+            stage.show();
         }
-        private VBox createNextContent() {
-            VBox nextContentBox = new VBox(10);
-            nextContentBox.setAlignment(Pos.CENTER);
 
-            Label helloLabel = new Label("Hello");
-            helloLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
-
-            nextContentBox.getChildren().add(helloLabel);
-
-            return nextContentBox;
+        private void handleGadgetButton() {
+            VBox gad = new VBox(10);
+            System.out.println("Halo");
+            Scene scene = new Scene(gad, 300, 200);
+            Stage stage = new Stage();
+            stage.setTitle("Gadget");
+            stage.setScene(scene);
+            stage.show();
         }
 
         private static void handleprofileButton() {
