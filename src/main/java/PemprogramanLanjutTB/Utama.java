@@ -14,10 +14,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
+import javax.swing.event.HyperlinkEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,6 +39,9 @@ public class Utama extends Application {
     private static Label productLabel;
     private static Label imeiResultLabel;
     private static Label activationDateLabel;
+    private Button gadgetButton;
+
+
 
     public static void main(String[] args) {
         launch();
@@ -137,6 +142,14 @@ public class Utama extends Application {
     }
 
     private void createForgotPasswordScene(Stage stage) {
+        Hyperlink registerLink = new Hyperlink("Kembali");
+        registerLink.setOnAction(e -> stage.setScene(loginScene));
+        registerLink.setLayoutX(10);
+        registerLink.setLayoutY(10);
+        VBox back = new VBox(5);
+        back.getChildren().addAll(registerLink);
+        back.setAlignment(Pos.TOP_LEFT);
+
         Label forgotPasswordLabel = new Label("Masukkan Alamat Email");
         TextField forgotPasswordEmailField = new TextField();
         forgotPasswordEmailField.setPromptText("Email");
@@ -145,8 +158,9 @@ public class Utama extends Application {
         submitForgotPasswordButton.setOnAction(e -> handleForgotPassword(stage, forgotPasswordEmailField.getText()));
 
         VBox forgotPasswordLayout = new VBox(5);
-        forgotPasswordLayout.getChildren().addAll(forgotPasswordLabel, forgotPasswordEmailField, submitForgotPasswordButton);
+        forgotPasswordLayout.getChildren().addAll(back,forgotPasswordLabel, forgotPasswordEmailField, submitForgotPasswordButton);
         forgotPasswordLayout.setAlignment(Pos.CENTER);
+        forgotPasswordLayout.setStyle("-fx-background-color: #EEF5FF; -fx-padding: 20;");
 
         forgotPasswordScene = new Scene(forgotPasswordLayout, 650, 700);
     }
@@ -251,6 +265,8 @@ public class Utama extends Application {
             ImageView profileImageView = new ImageView(profileImage);
             profileImageView.setFitWidth(30);
             profileImageView.setFitHeight(30);
+            profileImageView.setOnMouseClicked(e -> handleprofileButton());
+
 
             Label gtradeLabel = new Label("\t\t\tGTrade");
             gtradeLabel.setStyle("-fx-font-size: 25; -fx-text-fill: white;");
@@ -308,6 +324,10 @@ public class Utama extends Application {
             ImageView bottomProductImageView = new ImageView(bottomProductImage);
             bottomProductImageView.setFitWidth(30);
             bottomProductImageView.setFitHeight(30);
+            Button gadgetButton = new Button();
+            gadgetButton.setStyle("-fx-background-color: transparent;");
+            gadgetButton.setGraphic(bottomProductImageView);
+            gadgetButton.setOnAction(e -> handleGadgetButton());
 
             Region spacer2 = new Region();
             HBox.setHgrow(spacer2, Priority.ALWAYS);
@@ -357,10 +377,65 @@ public class Utama extends Application {
             setLeft(mainContent);
             createImeiContent();
         }
+        private void handleGadgetButton() {
+            VBox nextContentBox = createNextContent();
+            setCenter(nextContentBox);
+        }
+        private VBox createNextContent() {
+            VBox nextContentBox = new VBox(10);
+            nextContentBox.setAlignment(Pos.CENTER);
+
+            Label helloLabel = new Label("Hello");
+            helloLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+
+            nextContentBox.getChildren().add(helloLabel);
+
+            return nextContentBox;
+        }
+
+        private static void handleprofileButton() {
+            String currentUser = "admin";
+
+            try {
+                List<String> userData = Files.readAllLines(Paths.get("DataUser.txt"));
+
+                for (String line : userData) {
+                    String[] parts = line.split(",");
+                    String storedUsername = parts[1];
+
+                    if (storedUsername.equals(currentUser)) {
+                        String storedEmail = parts[2];
+                        String storedName = parts[0];
+
+                        showUserProfile(storedName, storedEmail);
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private static void showUserProfile(String name, String email) {
+            VBox userProfileBox = new VBox(10);
+            userProfileBox.setAlignment(Pos.CENTER);
+            userProfileBox.setPadding(new Insets(10));
+
+            Label nameLabel = new Label("Name: " + name);
+            Label emailLabel = new Label("Email: " + email);
+
+            userProfileBox.getChildren().addAll(nameLabel, emailLabel);
+
+            Stage userProfileStage = new Stage();
+            userProfileStage.setTitle("User Profile");
+            userProfileStage.setScene(new Scene(userProfileBox, 300, 200));
+            userProfileStage.show();
+        }
 
         private static void handleHomeButton() {
             createHomeContent();
         }
+
 
         private static void createHomeContent() {
             VBox homeContentBox = new VBox(10);
