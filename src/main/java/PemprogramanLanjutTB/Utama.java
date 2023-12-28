@@ -629,7 +629,6 @@ public class Utama extends Application {
         }
 
 
-
         private static void handleprofileButton() {
             String currentUser = "admin";
 
@@ -731,6 +730,7 @@ public class Utama extends Application {
         private static VBox createImeiContent() {
             VBox imeiContentBox = new VBox(10);
             imeiContentBox.setAlignment(Pos.CENTER);
+            imeiContentBox.setStyle("-fx-background-color: #EEF5FF; -fx-padding: 20");
 
             Label imeiTitleLabel = new Label("Cek IMEI");
             imeiTitleLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
@@ -762,7 +762,7 @@ public class Utama extends Application {
 
             Stage newStage = new Stage();
             newStage.setTitle("IMEI Search");
-            newStage.setScene(new Scene(imeiContentBox, 400, 400));
+            newStage.setScene(new Scene(imeiContentBox, 650, 700));
             newStage.show();
         }
 
