@@ -113,7 +113,7 @@ public class Utama extends Application {
 
         loginButton.setPrefSize(150, 30);
 
-        loginScene = new Scene(loginLayout, 500, 600);
+        loginScene = new Scene(loginLayout, 600, 700);
     }
 
     private void createRegisterScene(Stage stage) {
@@ -150,7 +150,7 @@ public class Utama extends Application {
                 registerEmailField, registerPasswordField, confirmRegisterPasswordField, registerSubmitButton, backToLoginLink);
         registerLayout.setAlignment(Pos.CENTER);
         registerLayout.setStyle("-fx-background-color: #EEF5FF; -fx-padding: 20;");
-        registerScene = new Scene(registerLayout, 500, 600);
+        registerScene = new Scene(registerLayout, 600, 700);
     }
 
     private void createForgotPasswordScene(Stage stage) {
@@ -174,7 +174,7 @@ public class Utama extends Application {
         forgotPasswordLayout.setAlignment(Pos.CENTER);
         forgotPasswordLayout.setStyle("-fx-background-color: #EEF5FF; -fx-padding: 20;");
 
-        forgotPasswordScene = new Scene(forgotPasswordLayout, 500, 600);
+        forgotPasswordScene = new Scene(forgotPasswordLayout, 600, 700600);
     }
 
     private void handleLogin(Stage stage, String emailOrUsername, String password) {
@@ -196,7 +196,7 @@ public class Utama extends Application {
                 showSuccessDialog("Login successful!");
 
                 Beranda halamanUtama = new Beranda(stage);
-                stage.setScene(new Scene(halamanUtama, 500, 600));
+                stage.setScene(new Scene(halamanUtama, 600, 700));
                 return;
             }
         }
@@ -509,7 +509,7 @@ public class Utama extends Application {
 
             gadLayout.setBottom(bottomBarBoxGad);
 
-            Scene scene = new Scene(gadLayout, 500, 600);
+            Scene scene = new Scene(gadLayout, 600, 700);
             Stage stage = new Stage();
             stage.setTitle("Invoice");
             stage.setScene(scene);
@@ -629,7 +629,7 @@ public class Utama extends Application {
             bottomBarBoxGad.getChildren().addAll(bottomHomeImageView, spacer1, gadgetButton, spacer2, InvoiceButton, spacer3, warrantyButton);
             gadLayout.setBottom(bottomBarBoxGad);
 
-            Scene scene = new Scene(gadLayout, 500, 600);
+            Scene scene = new Scene(gadLayout, 600, 700);
             Stage stage = new Stage();
             stage.setTitle("Gadget");
             stage.setScene(scene);
