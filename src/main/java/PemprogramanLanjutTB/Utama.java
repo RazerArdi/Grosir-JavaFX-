@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.scene.shape.Line;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -562,11 +563,29 @@ public class Utama extends Application {
             headerBox.getChildren().addAll(profileImageView, gtradeLabel, region, searchButton, notificationButton);
             gadLayout.setTop(headerBox);
 
+            Label daftarProdukLabel = new Label("Daftar Produk");
+            daftarProdukLabel.setStyle("-fx-font-size: 20; -fx-text-fill: Black;");
 
+            Image plusImage = new Image(Utama.class.getResourceAsStream("/plus.png"));
+            ImageView plusImageView = new ImageView(plusImage);
+            plusImageView.setFitWidth(30);
+            plusImageView.setFitHeight(30);
+
+            HBox daftarProdukBox = new HBox();
+            daftarProdukBox.getChildren().addAll(daftarProdukLabel, plusImageView);
+            daftarProdukBox.setAlignment(Pos.CENTER_LEFT);
+            daftarProdukBox.setPadding(new Insets(10, 10, 0, 10));
+
+            VBox headerVBox = new VBox();
+            headerVBox.getChildren().addAll(headerBox, daftarProdukBox);
+
+            gadLayout.setTop(headerVBox);
+
+            Line garis = new Line(50, 50, 250, 50);
             VBox GadgetContent = new VBox(10);
-            Label Invoice = new Label("Gadget Content");
+            Label Gadg = new Label("Gadget Content");
             Text gadgetDescription = new Text("This is the content of the Gadget page.");
-            GadgetContent.getChildren().addAll(Invoice, gadgetDescription);
+            GadgetContent.getChildren().addAll(garis,Gadg, gadgetDescription);
 
             gadLayout.setCenter(GadgetContent);
 
