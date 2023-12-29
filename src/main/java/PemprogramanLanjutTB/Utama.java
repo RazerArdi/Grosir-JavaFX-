@@ -519,7 +519,7 @@ public class Utama extends Application {
         private void handleGadgetButton() {
             BorderPane gadLayout = new BorderPane();
 
-            HBox headerBox = new HBox(10);
+            HBox headerBox = new HBox();
             headerBox.setStyle("-fx-background-color: #4CAF50;");
             headerBox.setPadding(new Insets(10));
             headerBox.setSpacing(10);
@@ -562,20 +562,23 @@ public class Utama extends Application {
             headerBox.getChildren().addAll(profileImageView, gtradeLabel, region, searchButton, notificationButton);
             gadLayout.setTop(headerBox);
 
-            VBox gadgetContent = new VBox(10);
-            Label gadgetLabel = new Label("Daftar Produk");
-            gadgetLabel.setStyle("-fx-font-family: Arial; -fx-font-size: 20; -fx-font-weight: bold;");
+
+            VBox GadgetContent = new VBox(10);
+            Label Invoice = new Label("Gadget Content");
             Text gadgetDescription = new Text("This is the content of the Gadget page.");
-            Line garis = new Line(50, 50, 3000, 50);
+            GadgetContent.getChildren().addAll(Invoice, gadgetDescription);
 
-            gadgetContent.getChildren().addAll(gadgetLabel,garis, gadgetDescription);
-
-            gadLayout.setCenter(gadgetContent);
+            gadLayout.setCenter(GadgetContent);
 
             HBox bottomBarBoxGad = new HBox();
             bottomBarBoxGad.setStyle("-fx-background-color: #4CAF50;");
             bottomBarBoxGad.setPadding(new Insets(10));
             bottomBarBoxGad.setSpacing(25);
+
+            HBox bottomBarBox = new HBox();
+            bottomBarBox.setStyle("-fx-background-color: #4CAF50;");
+            bottomBarBox.setPadding(new Insets(10));
+            bottomBarBox.setSpacing(25);
 
             Image bottomHomeImage = new Image(Utama.class.getResourceAsStream("/home.png"));
             ImageView bottomHomeImageView = new ImageView(bottomHomeImage);
@@ -594,7 +597,6 @@ public class Utama extends Application {
             ImageView bottomProductImageView = new ImageView(bottomProductImage);
             bottomProductImageView.setFitWidth(30);
             bottomProductImageView.setFitHeight(30);
-
             Button gadgetButton = new Button();
             gadgetButton.setStyle("-fx-background-color: transparent;");
             gadgetButton.setGraphic(bottomProductImageView);
@@ -603,15 +605,16 @@ public class Utama extends Application {
             Region spacer2 = new Region();
             HBox.setHgrow(spacer2, Priority.ALWAYS);
 
+
             Image bottomInvoiceImage = new Image(Utama.class.getResourceAsStream("/invoice.png"));
             ImageView bottomInvoiceImageView = new ImageView(bottomInvoiceImage);
+            Button InvoiceButton = new Button();
             bottomInvoiceImageView.setFitWidth(30);
             bottomInvoiceImageView.setFitHeight(30);
-
-            Button InvoiceButton = new Button();
             InvoiceButton.setStyle("-fx-background-color: transparent;");
             InvoiceButton.setGraphic(bottomInvoiceImageView);
             InvoiceButton.setOnAction(e -> handleInvoiceButton());
+
 
             Region spacer3 = new Region();
             HBox.setHgrow(spacer3, Priority.ALWAYS);
@@ -627,6 +630,7 @@ public class Utama extends Application {
             warrantyButton.setOnAction(e -> handleWarrantyButton());
 
             bottomBarBoxGad.getChildren().addAll(bottomHomeImageView, spacer1, gadgetButton, spacer2, InvoiceButton, spacer3, warrantyButton);
+
             gadLayout.setBottom(bottomBarBoxGad);
 
             Scene scene = new Scene(gadLayout, 600, 700);
